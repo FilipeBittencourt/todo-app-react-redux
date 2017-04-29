@@ -4,7 +4,8 @@ import { bindActionCreators } from 'redux'
 
 import Grid from '../template/grid'
 import IconButton from '../template/iconButton'
-import { add, changeDescription, search } from './todoActions'
+import { add, changeDescription, search, clear } from './todoActions'
+
 
 class TodoForm extends Component {
     constructor(props) {
@@ -18,16 +19,16 @@ class TodoForm extends Component {
     }
 
     keyHandler(event) {
-        const { add, search, description } = this.props
+        const { add, search, description, clear } = this.props
         if (event.key === 'Enter') {
             event.shiftKey ? search() : add(description)
         } else if (event.key === 'Escape') {
-            props.handleClear()
+            clear()
         }
     }
 
     render() {
-        const { add, search, description } = this.props
+        const { add, search, description, clear } = this.props
         return (
             <div role='form' className='todoForm'>
                 <Grid cols='12 9 10'>
@@ -39,8 +40,8 @@ class TodoForm extends Component {
                 </Grid>
                 <Grid cols='12 3 2'>
                     <IconButton style='primary' icon='plus' onClick={() => add(description)}></IconButton>
-                    <IconButton style='info' icon='search' onClick={() => search()}></IconButton>
-                    <IconButton style='default' icon='close' onClick={this.props.handleClear}></IconButton>
+                    <IconButton style='info' icon='search' onClick={search}></IconButton>
+                    <IconButton style='default' icon='close' onClick={() => clear()}></IconButton>
                 </Grid>
             </div>
         )
@@ -48,6 +49,5 @@ class TodoForm extends Component {
 }
 
 const mapStateToProps = state => ({ description: state.todo.description })
-const mapDispatchToProps = dispatch =>
-    bindActionCreators({ add, changeDescription, search}, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ clear, add, changeDescription, search}, dispatch)
 export default connect(mapStateToProps, mapDispatchToProps)(TodoForm)
